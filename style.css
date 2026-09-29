@@ -1,0 +1,194 @@
+:root {
+  --bg: #fff;
+  --fg: #000;
+  --faint: #c9c9c9;
+  --muted: #666;
+  --accent: #1a4fd6;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+main {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 12vh 20px 45vh;
+}
+
+h1 {
+  font-size: 2rem;
+  line-height: 1.2;
+  margin: 0 0 1.5rem;
+}
+
+p { margin: 0 0 1rem; }
+
+label {
+  display: block;
+  margin: 1.5rem 0 .5rem;
+}
+
+.row {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+}
+
+input[type="text"] {
+  font: inherit;
+  flex: 1 1 220px;
+  max-width: 320px;
+  padding: .5rem .6rem;
+  border: 1px solid var(--fg);
+  border-radius: 0;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+button {
+  font: inherit;
+  padding: .5rem 1rem;
+  border: 1px solid var(--fg);
+  border-radius: 0;
+  background: var(--fg);
+  color: var(--bg);
+  cursor: pointer;
+}
+
+input:focus-visible, button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+
+a { color: var(--fg); }
+
+/* Level 1: the code, barely there. */
+.faint {
+  color: var(--faint);
+  margin: .5rem 0 0;
+}
+
+/* Level 2: same colour as the page, visible only when selected. */
+.invisible {
+  color: var(--bg);
+  margin: 0 0 1rem;
+  letter-spacing: .1em;
+}
+
+/* Level 3: the highlighted letters. */
+.m { color: var(--accent); }
+
+.msg {
+  min-height: 1.6em;
+  margin: .75rem 0 0;
+}
+
+.small {
+  font-size: .9rem;
+  color: var(--muted);
+}
+
+/* Level 4: the document exhibit. */
+.doc-frame {
+  display: block;
+  width: 100%;
+  height: 900px;
+  border: 1px solid var(--fg);
+  background: #fff;
+  margin: 0 0 .75rem;
+}
+
+main.wide { max-width: 860px; padding-top: 8vh; }
+
+/* Cutscene: loading interface. */
+.boot p { margin: 0 0 .5rem; min-height: 1.6em; }
+.bar {
+  height: 4px;
+  border: 1px solid var(--fg);
+  margin: 1.5rem 0 .5rem;
+}
+.bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--fg);
+}
+
+/* Cutscene: command prompt docked to the bottom. */
+.term {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 32vh;
+  min-height: 170px;
+  padding: 14px 20px;
+  background: #000;
+  color: #fff;
+  font-family: ui-monospace, Consolas, "Courier New", monospace;
+  font-size: 15px;
+  line-height: 1.5;
+  overflow: hidden;
+  transform: translateY(100%);
+  transition: transform .5s ease;
+}
+.term.open { transform: translateY(0); }
+.term p { margin: 0; white-space: pre-wrap; }
+
+/* Cutscene: read-only chat. */
+.chat p { margin: 0 0 .75rem; }
+.chat b { font-weight: 700; }
+.chat .typing { color: var(--muted); }
+.chat .note { color: var(--muted); font-size: .9rem; margin-top: 1.25rem; }
+
+/* Hack effect. */
+body.invert { filter: invert(1); }
+body.shake main { animation: shake .12s linear infinite; }
+@keyframes shake {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-6px, 2px); }
+  50% { transform: translate(5px, -3px); }
+  75% { transform: translate(-3px, -2px); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Final page. */
+body.dark {
+  --bg: #000;
+  --fg: #fff;
+  --muted: #8a8a8a;
+  font-family: ui-monospace, Consolas, "Courier New", monospace;
+  font-size: 17px;
+}
+body.dark main { max-width: 720px; padding-top: 10vh; padding-bottom: 45vh; }
+body.dark .term { border-top: 1px solid #555; }
+.term a { color: #fff; text-decoration: underline; }
+body.dark p { margin: 0 0 1.25rem; }
+body.dark .dim { color: var(--muted); }
+.cursor::after {
+  content: "";
+  display: inline-block;
+  width: .6em;
+  height: 1.1em;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  background: var(--fg);
+  animation: blink 1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .term { transition: none; }
+  body.shake main, .cursor::after { animation: none; }
+}
