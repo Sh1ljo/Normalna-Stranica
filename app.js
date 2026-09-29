@@ -324,7 +324,8 @@
   }
 
   // ----------------------------------------------------------- final page
-  const HACKER_LINES = [
+  // Stage 6: intro + name of the owner. Stage 7: the five-image code. Stage 8: end of what is written so far.
+  const HACKER_INTRO = [
     'Veza je preusmjerena. Ne zatvarajte ovu stranicu.',
     'Nisam iz te tvrtke. Ne brinite, niste u opasnosti.',
     'Ne vjerujte svemu što vidite. Ni ovoj stranici, ni toj tvrtki, ni većini onoga što Vam se pokazuje.',
@@ -332,6 +333,68 @@
     'Sve ću Vam objasniti poslije. Sada mi trebate pomoći s nečim.',
     'Dokument koji ste vidjeli mora ostati kod Vas. Preuzmite ga u konzoli ispod.',
   ];
+  const HACKER_SITE = [
+    'Tvrtka ima vlastitu internetsku stranicu: tvrtkakompanija.com. Otvorite je u konzoli ispod.',
+    'Negdje na njoj piše tko je vlasnik. Trebam njegovo ime i prezime. Upišite ga u konzolu.',
+  ];
+  const HACKER_CODE = [
+    'To je to. Hvala Vam.',
+    'Naravno, potrebna mi je i šifra. Zašto bi sve trebalo biti tako lako.',
+    'Ta tvrtka voli da ljudi gledaju samo ono što je na površini. Pogledajte pažljivije, i ne stanite na vrhu.',
+    'Nije sve na jednom mjestu. Ali ni tvrtka nije baš nasumična: sve ima svoj red.',
+    'Kad nešto nađete, znat ćete. Upišite šifru u konzolu.',
+  ];
+  const HACKER_END = [
+    'To je ta šifra. Sve je sjelo na svoje mjesto.',
+    'Hvala Vam. Ostalo ću objasniti kad dođe vrijeme.',
+  ];
+
+  // Prototype: local copy of the company site. Becomes https://tvrtkakompanija.com when it is deployed.
+  const SITE_URL = 'tvrtkakompanija/index.html';
+  const SITE_LABEL = 'tvrtkakompanija.com';
+
+  const plain = (v) =>
+    v.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/gi, 'd').toLowerCase().trim().split(/\s+/).sort().join(' ');
+  const OWNER = plain('Zvonimir Magonić'); // words are sorted, so "Magonić Zvonimir" works too
+  const FINAL_CODE = '16180';
+
+  const FINAL_CHECKERS = {
+    6: (v) => plain(v) === OWNER,
+    7: (v) => v.replace(/\s|-/g, '') === FINAL_CODE,
+  };
+
+  // One line in the console with a text field. Resolves when the answer is right; wrong answers stay in the log.
+  function askInConsole(term, level, label, wrong) {
+    return new Promise((resolve) => {
+      const ask = () => {
+        const line = addLine(term, `> ${label} `);
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'term-input';
+        input.autocomplete = 'off';
+        input.autocapitalize = 'off';
+        input.spellcheck = false;
+        input.setAttribute('aria-label', label);
+        line.appendChild(input);
+        term.scrollTop = term.scrollHeight;
+        input.focus({ preventScroll: true });
+
+        input.addEventListener('keydown', (event) => {
+          if (event.key !== 'Enter') return;
+          event.preventDefault();
+          const value = input.value;
+          input.replaceWith(document.createTextNode(value));
+          if (FINAL_CHECKERS[level](value)) {
+            resolve(value);
+          } else {
+            addLine(term, `> ${wrong}`);
+            ask();
+          }
+        });
+      };
+      ask();
+    });
+  }
 
   async function finalPage(animate) {
     document.body.className = 'dark';
@@ -341,36 +404,73 @@
       <div class="term" id="term" role="log" aria-label="Naredbeni redak"></div>`;
     const out = document.getElementById('out');
     const term = document.getElementById('term');
+    const scrollDown = () => window.scrollTo(0, document.body.scrollHeight);
 
     let last = null;
-    for (const text of HACKER_LINES) {
-      if (last) last.classList.remove('cursor');
-      last = addLine(out, '', 'cursor');
-      if (animate) {
-        await typeInto(last, text, 24);
-        await sleep(900);
-      } else {
-        last.textContent = text;
+    const say = async (lines, live) => {
+      for (const text of lines) {
+        if (last) last.classList.remove('cursor');
+        last = addLine(out, '', 'cursor');
+        if (live) {
+          await typeInto(last, text, 24);
+          scrollDown();
+          await sleep(900);
+        } else {
+          last.textContent = text;
+        }
       }
-    }
-    if (last) last.classList.remove('cursor');
+      if (last) last.classList.remove('cursor');
+    };
 
-    // The download is only offered here, in the console, after the hacker asks for it.
-    if (animate) {
+    // The download and the site link are only offered in the console, after the hacker asks for them.
+    const addFile = () => {
+      const line = addLine(term, '> Datoteka spremna: ');
+      const link = document.createElement('a');
+      link.href = PDF_URL;
+      link.download = PDF_NAME;
+      link.textContent = PDF_NAME;
+      line.appendChild(link);
+    };
+    const addSite = () => {
+      const line = addLine(term, '> Otvori: ');
+      const link = document.createElement('a');
+      link.href = SITE_URL;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.textContent = SITE_LABEL;
+      line.appendChild(link);
+    };
+    const openTerm = async (live) => {
       term.classList.add('open');
-      await sleep(700);
+      if (live) await sleep(700);
+    };
+
+    // On reload, what the visitor already got through is replayed instantly; only new text is typed out.
+    await say(HACKER_INTRO, animate);
+    await openTerm(animate);
+    addFile();
+    await say(HACKER_SITE, animate);
+    addSite();
+
+    if (stage === 6) {
+      await askInConsole(term, 6, 'Ime i prezime vlasnika:', 'Netočno. Pogledajte bolje.');
+      setStage(7);
+      await sleep(600);
+      await say(HACKER_CODE, true);
     } else {
-      term.classList.add('open');
+      await say(HACKER_CODE, false);
     }
-    addLine(term, '> Datoteka spremna: ');
-    const link = document.createElement('a');
-    link.href = PDF_URL;
-    link.download = PDF_NAME;
-    link.textContent = PDF_NAME;
-    term.lastChild.appendChild(link);
 
-    // Placeholder until the next chapters are written.
+    if (stage === 7) {
+      await askInConsole(term, 7, 'Šifra:', 'Netočno. Provjerite sve slike, redom.');
+      setStage(8);
+      await sleep(600);
+      await say(HACKER_END, true);
+    } else {
+      await say(HACKER_END, false);
+    }
     addLine(out, '[ nastavak slijedi ]', 'dim cursor');
+    scrollDown();
   }
 
   // ----------------------------------------------------------- test reset

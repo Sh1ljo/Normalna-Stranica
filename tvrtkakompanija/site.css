@@ -1,0 +1,69 @@
+:root {
+  --ink: #1d2733;
+  --muted: #5c6875;
+  --line: #dde3ea;
+  --brand: #0b5c8e;
+  --brand-dark: #08425f;
+  --soft: #f3f6f9;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink);
+  background: #fff;
+}
+
+a { color: var(--brand); }
+img { display: block; max-width: 100%; height: auto; }
+
+.wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+
+/* Header */
+header.top { border-bottom: 1px solid var(--line); background: #fff; }
+header.top .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 24px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+}
+.logo { font-weight: 700; font-size: 1.15rem; letter-spacing: .02em; color: var(--brand-dark); text-decoration: none; }
+.logo small { display: block; font-weight: 400; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+nav a { margin-left: 22px; text-decoration: none; color: var(--ink); font-size: .95rem; padding-bottom: 4px; }
+nav a:hover, nav a.on { color: var(--brand); border-bottom: 2px solid var(--brand); }
+
+/* Content */
+main { padding: 40px 0 56px; }
+h1 { font-size: 2.1rem; line-height: 1.2; margin: 0 0 .6rem; color: var(--brand-dark); }
+h2 { font-size: 1.35rem; margin: 2.2rem 0 .5rem; color: var(--brand-dark); }
+h3 { font-size: 1.05rem; margin: 0 0 .25rem; }
+.lead { font-size: 1.15rem; color: var(--muted); max-width: 46em; }
+.hero { margin: 0 0 32px; }
+.hero img { width: 100%; height: auto; }
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start; }
+.cols.wide-left { grid-template-columns: 3fr 2fr; }
+.fig { margin: 0; }
+.fig figcaption { font-size: .85rem; color: var(--muted); margin-top: 6px; }
+.list { list-style: none; padding: 0; margin: 0; }
+.list li { padding: 14px 0; border-top: 1px solid var(--line); }
+.list li:last-child { border-bottom: 1px solid var(--line); }
+.date { font-size: .85rem; color: var(--muted); }
+.banner { margin: 32px 0 0; }
+
+/* Footer */
+footer.bottom { background: var(--soft); border-top: 1px solid var(--line); padding: 26px 0; font-size: .9rem; color: var(--muted); }
+footer.bottom .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; }
+footer.bottom a { color: var(--muted); }
+
+@media (max-width: 720px) {
+  .cols, .cols.wide-left { grid-template-columns: 1fr; }
+  nav a { margin: 0 16px 0 0; }
+  h1 { font-size: 1.7rem; }
+}
