@@ -73,6 +73,19 @@ input:focus-visible, button:focus-visible, a:focus-visible {
 
 a { color: var(--fg); }
 
+/* Testing helper: reset progress. */
+#reset {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  padding: .2rem .5rem;
+  font-size: 12px;
+  background: var(--bg);
+  color: var(--muted);
+  border: 1px solid var(--muted);
+}
+
 /* Level 1: the code, barely there. */
 .faint {
   color: var(--faint);

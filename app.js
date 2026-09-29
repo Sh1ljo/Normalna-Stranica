@@ -368,6 +368,22 @@
     addLine(out, '[ nastavak slijedi ]', 'dim cursor');
   }
 
+  // ----------------------------------------------------------- test reset
+  // Testing helper: set to false before the game goes public.
+  const SHOW_RESET_BUTTON = true;
+
+  function addResetButton() {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.id = 'reset';
+    button.textContent = 'Resetiraj';
+    button.addEventListener('click', () => {
+      setStage(1);
+      location.href = location.pathname; // also drops any ?stage= from the URL
+    });
+    document.body.appendChild(button);
+  }
+
   // ------------------------------------------------------------------ main
   function render() {
     if (stage >= 1 && stage <= LAST_LEVEL) renderLevel(stage);
@@ -376,5 +392,6 @@
     window.scrollTo(0, 0);
   }
 
+  if (SHOW_RESET_BUTTON) addResetButton();
   render();
 })();
