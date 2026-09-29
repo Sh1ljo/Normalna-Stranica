@@ -326,27 +326,25 @@
   // ----------------------------------------------------------- final page
   // Stage 6: intro + name of the owner. Stage 7: the five-image code. Stage 8: end of what is written so far.
   const HACKER_INTRO = [
-    'Veza je preusmjerena. Ne zatvarajte ovu stranicu.',
-    'Nisam iz te tvrtke. Ne brinite, niste u opasnosti.',
-    'Ne vjerujte svemu što vidite. Ni ovoj stranici, ni toj tvrtki, ni većini onoga što Vam se pokazuje.',
-    'I nije samo ova tvrtka. Cijela zemlja je takva. Cijeli svijet je takav.',
-    'Sve ću Vam objasniti poslije. Sada mi trebate pomoći s nečim.',
-    'Dokument koji ste vidjeli mora ostati kod Vas. Preuzmite ga u konzoli ispod.',
+    'Veza je preusmjerena. Ne zatvaraj stranicu.',
+    'Nisam iz te tvrtke. Nisi u opasnosti.',
+    'Ne vjeruj svemu što vidiš. Ni ovoj stranici, ni toj tvrtki.',
+    'Nije samo ova tvrtka. Većina svijeta je maska. Objasnit ću poslije.',
+    'Dokument koji si vidio mora ostati kod tebe. Skini ga u konzoli ispod.',
   ];
   const HACKER_SITE = [
-    'Tvrtka ima vlastitu internetsku stranicu: tvrtkakompanija.com. Otvorite je u konzoli ispod.',
-    'Negdje na njoj piše tko je vlasnik. Trebam njegovo ime i prezime. Upišite ga u konzolu.',
+    'Tvrtka ima stranicu: tvrtkakompanija.com. Otvori je u konzoli.',
+    'Negdje piše tko je vlasnik. Trebam ime i prezime.',
   ];
   const HACKER_CODE = [
-    'To je to. Hvala Vam.',
-    'Naravno, potrebna mi je i šifra. Zašto bi sve trebalo biti tako lako.',
-    'Ta tvrtka voli da ljudi gledaju samo ono što je na površini. Pogledajte pažljivije, i ne stanite na vrhu.',
-    'Nije sve na jednom mjestu. Ali ni tvrtka nije baš nasumična: sve ima svoj red.',
-    'Kad nešto nađete, znat ćete. Upišite šifru u konzolu.',
+    'Hvala.',
+    'Naravno, treba mi i šifra. Zašto bi sve bilo tako lako.',
+    'Ta tvrtka voli da ljudi gledaju samo površinu. Ne staj na vrhu.',
+    'Nije sve na jednom mjestu, ali ni nasumično. Sve ima svoj red.',
   ];
   const HACKER_END = [
-    'To je ta šifra. Sve je sjelo na svoje mjesto.',
-    'Hvala Vam. Ostalo ću objasniti kad dođe vrijeme.',
+    'To je ta šifra. Hvala ti.',
+    'Ostalo ću objasniti kad dođe vrijeme.',
   ];
 
   // Prototype: local copy of the company site. Becomes https://tvrtkakompanija.com when it is deployed.
@@ -453,7 +451,7 @@
     addSite();
 
     if (stage === 6) {
-      await askInConsole(term, 6, 'Ime i prezime vlasnika:', 'Netočno. Pogledajte bolje.');
+      await askInConsole(term, 6, 'Ime i prezime vlasnika:', 'Netočno. Traži bolje.');
       setStage(7);
       await sleep(600);
       await say(HACKER_CODE, true);
@@ -462,7 +460,7 @@
     }
 
     if (stage === 7) {
-      await askInConsole(term, 7, 'Šifra:', 'Netočno. Provjerite sve slike, redom.');
+      await askInConsole(term, 7, 'Šifra:', 'Netočno. Provjeri sve, redom.');
       setStage(8);
       await sleep(600);
       await say(HACKER_END, true);
