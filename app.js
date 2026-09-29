@@ -262,16 +262,16 @@
 
     // Back on the normal page, with a command prompt opening at the bottom.
     app.innerHTML = `
-      <main>
+      <main class="has-term">
         ${TITLE}
         <p>Dobrodošli na normalnu stranicu. Hvala što ste posjetili. Želimo Vam ugodan ostatak dana.</p>
-        <div class="chat" id="chat" role="log" aria-live="polite"></div>
+        <div class="chat idle" id="chat" role="log" aria-live="polite"></div>
       </main>
       <div class="term" id="term" role="log" aria-label="Naredbeni redak"></div>`;
     const term = document.getElementById('term');
     const chat = document.getElementById('chat');
 
-    requestAnimationFrame(() => term.classList.add('open'));
+    setTimeout(() => term.classList.add('open'), 30); // after first paint so the slide-up transition runs
     await sleep(700);
 
     const t1 = addLine(term, '> ');
@@ -287,9 +287,12 @@
     addLine(term, '> Veza uspostavljena.');
     await sleep(900);
 
-    // The operator writes; the visitor can only read.
+    // The operator writes; the visitor can only read. The log is a scroll area, kept scrolled to the newest line.
+    const toBottom = () => { chat.scrollTop = chat.scrollHeight; };
+    chat.classList.remove('idle');
     for (const text of OPERATOR_MESSAGES) {
       const typing = addLine(chat, 'Operater piše…', 'typing');
+      toBottom();
       await sleep(900 + text.length * 22);
       typing.remove();
       const line = document.createElement('p');
@@ -297,10 +300,12 @@
       who.textContent = 'Operater: ';
       line.append(who, text);
       chat.appendChild(line);
+      toBottom();
       await sleep(700);
     }
     addLine(chat, 'Ovaj razgovor je samo za čitanje.', 'note');
     addLine(chat, 'Operater piše…', 'typing');
+    toBottom();
     await sleep(OPERATOR_WAIT_MS);
 
     // Something else takes over the connection.
@@ -332,7 +337,7 @@
     document.body.className = 'dark';
     document.title = '…';
     app.innerHTML = `
-      <main id="out"></main>
+      <main id="out" class="has-term"></main>
       <div class="term" id="term" role="log" aria-label="Naredbeni redak"></div>`;
     const out = document.getElementById('out');
     const term = document.getElementById('term');

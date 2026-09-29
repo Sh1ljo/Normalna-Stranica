@@ -22,9 +22,23 @@ body {
 
 main {
   max-width: 640px;
+  min-height: 100vh;
+  min-height: 100dvh;
   margin: 0 auto;
-  padding: 12vh 20px 45vh;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
+
+main > * { max-width: 100%; }
+
+/* Pages with the command prompt docked at the bottom centre their content in the space above it. */
+main.has-term { padding-bottom: calc(max(32vh, 170px) + 20px); }
+
+form { width: 100%; max-width: 420px; }
 
 h1 {
   font-size: 2rem;
@@ -43,6 +57,7 @@ label {
   display: flex;
   gap: .5rem;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 input[type="text"] {
@@ -122,11 +137,12 @@ a { color: var(--fg); }
   margin: 0 0 .75rem;
 }
 
-main.wide { max-width: 860px; padding-top: 8vh; }
+main.wide { max-width: 860px; }
 
 /* Cutscene: loading interface. */
 .boot p { margin: 0 0 .5rem; min-height: 1.6em; }
 .bar {
+  width: min(320px, 100%);
   height: 4px;
   border: 1px solid var(--fg);
   margin: 1.5rem 0 .5rem;
@@ -160,6 +176,21 @@ main.wide { max-width: 860px; padding-top: 8vh; }
 .term p { margin: 0; white-space: pre-wrap; }
 
 /* Cutscene: read-only chat. */
+/* Fixed-height scroll area with an always-visible scrollbar, so it is clear the log can be scrolled. */
+.chat {
+  width: 100%;
+  max-width: 560px;
+  height: max(30vh, 150px);
+  overflow-y: scroll;
+  padding-right: 12px;
+  text-align: left;
+  scrollbar-width: thin;
+  scrollbar-color: #000 #e6e6e6;
+}
+.chat.idle { visibility: hidden; }
+.chat::-webkit-scrollbar { width: 8px; }
+.chat::-webkit-scrollbar-track { background: #e6e6e6; }
+.chat::-webkit-scrollbar-thumb { background: #000; }
 .chat p { margin: 0 0 .75rem; }
 .chat b { font-weight: 700; }
 .chat .typing { color: var(--muted); }
@@ -184,7 +215,7 @@ body.dark {
   font-family: ui-monospace, Consolas, "Courier New", monospace;
   font-size: 17px;
 }
-body.dark main { max-width: 720px; padding-top: 10vh; padding-bottom: 45vh; }
+body.dark main { max-width: 720px; }
 body.dark .term { border-top: 1px solid #555; }
 .term a { color: #fff; text-decoration: underline; }
 body.dark p { margin: 0 0 1.25rem; }
